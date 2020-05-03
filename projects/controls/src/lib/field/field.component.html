@@ -1,0 +1,7 @@
+<div class="field-wrap">
+  <label *ngIf="label">{{label}}</label>
+  <ng-content></ng-content>
+</div>
+<div *ngIf="hint" class="hint">{{hint}}</div>
+<div *ngIf="warning" class="warning">{{warning}}</div>
+<div *ngFor="let error of errors" class="error">{{error}}</div>

@@ -1,0 +1,84 @@
+.field-wrap {
+  display: block;
+  position: relative;
+  margin-bottom: $field-mb;
+
+  > label {
+    font-size: $font-size;
+    color: $border-color;
+    transition: font-size .3s, top .3s;
+    line-height: 1;
+    pointer-events: none;
+    position: absolute;
+    top: $input-ptb + $input-bw;
+    left: $input-pl + $input-bw;
+    margin: 0;
+    padding: 0;
+  }
+
+  .has-value &, .has-focus & {
+    > label {
+      top: $font-size-small / 2 + $input-bw;
+      font-size: $font-size-small;
+    }
+  }
+
+  .has-focus & {
+    > label {
+      color: $border-focus-color;
+    }
+  }
+
+  .has-label & .field-input {
+    padding: $input-pt $input-pl $input-pb;
+  }
+
+  ~ {
+    .hint, .warning, .error {
+      font-size: $font-size-small;
+      line-height: $line-height-small;
+      margin: -$hint-mb 0 $hint-mb;
+
+      + .hint, + .warning, + .error {
+        margin-bottom: $hint-mb;
+      }
+    }
+
+    .hint {
+      color: $hint-color;
+    }
+
+    .warning {
+      color: $warning-color;
+    }
+
+    .error {
+      color: $error-color;
+    }
+  }
+
+  + .hint, + .warning, + .error {
+    margin-top: $hint-mt;
+  }
+}
+
+.field-suffix {
+  display: block;
+  position: absolute;
+  height: $suffix-height;
+  width: $suffix-width;
+  top: $suffix-top;
+  right: $suffix-right;
+  border: none;
+  background: #fff;
+  padding: 0;
+  font-size: 16px;
+
+  & + & {
+    right: $suffix-width + $suffix-right;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

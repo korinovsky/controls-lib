@@ -1,0 +1,32 @@
+$field-mb: 25px;
+$field-height: 50px;
+
+$font-size: 14px;
+$line-height: 16px;
+$font-size-small: 12px;
+$line-height-small: 14px;
+
+$input-bw: 1px;
+$input-br: 4px;
+$input-pl: 8px;
+$input-ptb: ($field-height - $line-height) / 2 - $input-bw;
+$input-pt: $input-ptb + $font-size-small / 2;
+$input-pb: $field-height - $input-pt - $line-height - $input-bw * 2;
+
+$hint-mt: $line-height-small - $font-size-small - $field-mb;
+$hint-mb: -$hint-mt - $line-height-small;
+
+$font-color: #000;
+$border-color: #999;
+$border-focus-color: #666;
+$hint-color: #999;
+$warning-color: #ff8c00;
+$error-color: #ff4500;
+
+$suffix-height: 36px;
+$suffix-width: 36px;
+$suffix-top: ($field-height - $suffix-height) / 2;
+$suffix-right: 9px;
+
+$dropdown-item-height: 38px;
+$dropdown-item-ptb: ($dropdown-item-height - $line-height) / 2 - $input-bw;

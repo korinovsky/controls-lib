@@ -1,0 +1,37 @@
+<input
+  (keydown.arrowDown)="offsetFocused(1, $event)"
+  (keydown.arrowUp)="offsetFocused(-1, $event)"
+  (keydown.enter)="selectFocused($event)"
+  [disabled]="isDisabled"
+  ctrlInput
+>
+<button
+  (blur)="onBlur()"
+  (click)="clear()"
+  (focus)="onFocus()"
+  class="field-suffix"
+>
+  ˅
+</button>
+<button
+  (click)="clear()"
+  class="field-suffix clear"
+>
+  ×
+</button>
+<div *ngIf="hasDropdown" class="field-dropdown">
+  <button
+    (blur)="onBlur()"
+    (click)="select(item, $event.target)"
+    (focus)="focusIndex = index; onFocus()"
+    (keydown.arrowDown)="offsetFocused(1, $event)"
+    (keydown.arrowUp)="offsetFocused(-1, $event)"
+    (keydown.enter)="selectFocused($event)"
+    *ngFor="let item of filtered; let index = index"
+    [class.focused]="focusIndex === index"
+    tabindex="-1"
+    type="button"
+  >
+    {{item.text}}
+  </button>
+</div>

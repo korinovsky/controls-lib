@@ -1,0 +1,44 @@
+.field-dropdown {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: $field-height - 1px;
+
+  > * {
+    display: block;
+    height: $dropdown-item-height;
+    text-align: left;
+    line-height: $line-height;
+    padding: $dropdown-item-ptb $input-pl;
+    width: 100%;
+    background: #fff;
+    border-width: $input-bw;
+    border: $input-bw solid $border-focus-color;
+    color: $font-color;
+    font-size: $font-size;
+
+    &:focus {
+      outline: none;
+    }
+
+    &.focused {
+      background: #eee;
+    }
+
+    &:last-child {
+      border-radius: 0 0 $input-br $input-br;
+    }
+
+    + * {
+      margin-top: -$input-bw;
+    }
+  }
+
+  .has-focus & {
+    display: block;
+  }
+}
+
+.has-focus .has-dropdown .field-input {
+  border-radius: $input-br $input-br 0 0;
+}

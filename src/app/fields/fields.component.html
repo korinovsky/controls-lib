@@ -1,0 +1,23 @@
+<ctrl-field hint="Hint" label="Label" warning="Warning">
+  <input
+    [formControl]="inputControl"
+    ctrlInput
+  >
+</ctrl-field>
+<ctrl-field hint="Hint text" label="Label text" warning="Warning">
+  <textarea
+    [formControl]="textControl"
+    ctrlInput
+  ></textarea>
+</ctrl-field>
+<ctrl-field label="Select">
+  <ctrl-select
+    [formControl]="selectControl"
+    [items]="[{value: '1', text: 'One'}, {value: '2', text: 'Two'}]"
+  ></ctrl-select>
+</ctrl-field>
+<input
+  [formControl]="inputControl2"
+  ctrlInput
+  placeholder="Placeholder"
+>

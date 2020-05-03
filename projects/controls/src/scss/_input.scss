@@ -1,0 +1,22 @@
+
+.field-input {
+  width: 100%;
+  display: block;
+  padding: $input-ptb $input-pl;
+  font-size: $font-size;
+  line-height: $line-height;
+  color: $font-color;
+  border: $input-bw solid $border-color;
+  border-radius: $input-br;
+  box-sizing: border-box;
+  resize: none;
+
+  &:focus {
+    border-color: $border-focus-color;
+    outline: none;
+  }
+}
+
+textarea.field-input {
+  overflow-y: hidden;
+}
