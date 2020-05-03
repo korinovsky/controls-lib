@@ -15,8 +15,8 @@ export interface InputField {
 export class InputDirective implements InputField, OnInit {
   focused = new EventEmitter<boolean>();
   changed = new EventEmitter<string>();
+  element: HTMLInputElement;
   private input = new EventEmitter<string>();
-  private element: HTMLInputElement;
   private _value: string;
 
   constructor(

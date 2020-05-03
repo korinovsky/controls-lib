@@ -23,8 +23,8 @@ $hint-color: #999;
 $warning-color: #ff8c00;
 $error-color: #ff4500;
 
-$suffix-height: 36px;
-$suffix-width: 36px;
+$suffix-height: 24px;
+$suffix-width: $suffix-height;
 $suffix-top: ($field-height - $suffix-height) / 2;
 $suffix-right: 9px;
 

@@ -14,14 +14,16 @@
     background: #fff;
     border-width: $input-bw;
     border: $input-bw solid $border-focus-color;
+    border-top-color: $border-color;
     color: $font-color;
     font-size: $font-size;
+    cursor: pointer;
 
     &:focus {
       outline: none;
     }
 
-    &.focused {
+    &:hover, &.focused {
       background: #eee;
     }
 
@@ -41,4 +43,12 @@
 
 .has-focus .has-dropdown .field-input {
   border-radius: $input-br $input-br 0 0;
+}
+
+.allow-clear .field-suffix.clear {
+  display: none;
+
+  .has-value & {
+    display: block;
+  }
 }

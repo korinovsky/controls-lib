@@ -1,6 +1,7 @@
 import {Component, EventEmitter, forwardRef, HostBinding, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {InputDirective, InputField} from '../input/input.directive';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Icon} from "../icon/icon.component";
 
 export interface Item {
   value: any;
@@ -18,6 +19,7 @@ export interface Item {
 })
 export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor, InputField {
   @Input() items: Item[];
+  @HostBinding('class.allow-clear')
   @Input() allowClear = true;
   @Input() autoSelectFirst = false;
   @ViewChild(InputDirective, {static: true}) inputDirective: InputDirective;
@@ -27,6 +29,8 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   changed: EventEmitter<string>;
   focused = new EventEmitter<boolean>();
   focusIndex: number;
+  iconChevronDown = Icon.ChevronDown;
+  iconClose = Icon.Close;
   private selected: Item;
   private onChange: (_: any) => void = (value => this.preloadValue = value);
   private preloadValue: any;
@@ -106,6 +110,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
 
   clear() {
     this.select(null);
+    this.inputDirective.element.focus()
   }
 
   onFocus() {

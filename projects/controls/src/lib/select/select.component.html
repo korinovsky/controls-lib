@@ -7,17 +7,21 @@
 >
 <button
   (blur)="onBlur()"
-  (click)="clear()"
   (focus)="onFocus()"
+  (keydown.arrowDown)="offsetFocused(1, $event)"
+  (keydown.arrowUp)="offsetFocused(-1, $event)"
+  (keydown.enter)="selectFocused($event)"
   class="field-suffix"
+  tabindex="-1"
 >
-  ˅
+  <ctrl-icon [icon]="iconChevronDown"></ctrl-icon>
 </button>
 <button
   (click)="clear()"
   class="field-suffix clear"
+  tabindex="-1"
 >
-  ×
+  <ctrl-icon [icon]="iconClose"></ctrl-icon>
 </button>
 <div *ngIf="hasDropdown" class="field-dropdown">
   <button
