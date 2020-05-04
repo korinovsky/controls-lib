@@ -2,7 +2,7 @@
   display: none;
   position: absolute;
   width: 100%;
-  top: $field-height - 1px;
+  top: $field-height - $input-bw;
 
   > * {
     display: block;
@@ -12,7 +12,6 @@
     padding: $dropdown-item-ptb $input-pl;
     width: 100%;
     background: #fff;
-    border-width: $input-bw;
     border: $input-bw solid $border-focus-color;
     border-top-color: $border-color;
     color: $font-color;

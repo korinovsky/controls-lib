@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-fields',
@@ -7,10 +7,10 @@ import {FormControl} from '@angular/forms';
   styleUrls: ['./fields.component.scss']
 })
 export class FieldsComponent implements OnInit {
-  inputControl = new FormControl();
+  inputControl = new FormControl(null, Validators.required);
   inputControl2 = new FormControl();
-  textControl = new FormControl();
-  selectControl = new FormControl();
+  textControl = new FormControl(null, Validators.required);
+  selectControl = new FormControl('1', Validators.required);
 
   constructor() {
   }

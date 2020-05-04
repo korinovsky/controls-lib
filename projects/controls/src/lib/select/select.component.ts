@@ -1,7 +1,9 @@
-import {Component, EventEmitter, forwardRef, HostBinding, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, EventEmitter, forwardRef, HostBinding, Input, OnChanges, OnInit, SimpleChanges, ViewChild
+} from '@angular/core';
 import {InputDirective, InputField} from '../input/input.directive';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Icon} from "../icon/icon.component";
+import {Icon} from '../icon/icon.component';
 
 export interface Item {
   value: any;
@@ -11,6 +13,7 @@ export interface Item {
 @Component({
   selector: 'ctrl-select',
   templateUrl: './select.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectComponent),
@@ -110,7 +113,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
 
   clear() {
     this.select(null);
-    this.inputDirective.element.focus()
+    this.inputDirective.element.focus();
   }
 
   onFocus() {

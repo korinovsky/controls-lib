@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 export enum Icon {
   ChevronDown,
@@ -13,7 +13,8 @@ const icons: { [key: number]: { path: string; viewBox: string } | string } = {
 
 @Component({
   selector: 'ctrl-icon',
-  templateUrl: './icon.component.html'
+  templateUrl: './icon.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnInit, OnChanges {
   @Input() icon: Icon;
@@ -24,7 +25,7 @@ export class IconComponent implements OnInit, OnChanges {
   viewBox: string;
 
   ngOnInit(): void {
-    this.sizeChanged()
+    this.sizeChanged();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -47,7 +48,7 @@ export class IconComponent implements OnInit, OnChanges {
   }
 
   private sizeChanged() {
-    const style = typeof this.size === "string"
+    const style = typeof this.size === 'string'
       ? this.size
       : `${this.size * 1.5}rem`;
     this.style.width = this.style.height = style;

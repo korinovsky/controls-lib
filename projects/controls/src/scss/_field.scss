@@ -33,6 +33,10 @@
     }
   }
 
+  .has-error & .field-input {
+    border-color: $error-color;
+  }
+
   .has-label & .field-input {
     padding: $input-pt $input-pl $input-pb;
   }

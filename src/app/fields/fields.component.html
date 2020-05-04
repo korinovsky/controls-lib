@@ -4,7 +4,7 @@
     ctrlInput
   >
 </ctrl-field>
-<ctrl-field hint="Hint text" label="Label text" warning="Warning">
+<ctrl-field label="Label text">
   <textarea
     [formControl]="textControl"
     ctrlInput
@@ -15,7 +15,7 @@
     [formControl]="selectControl"
     [items]="[{value: '1', text: 'One'}, {value: '2', text: 'Two'}]"
   ></ctrl-select>
-</ctrl-field>
+</ctrl-field><button (click)="selectControl.setValue('2')">Two</button>
 <input
   [formControl]="inputControl2"
   ctrlInput
