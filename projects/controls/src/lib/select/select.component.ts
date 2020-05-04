@@ -5,7 +5,7 @@ import {InputDirective, InputField} from '../input/input.directive';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Icon} from '../icon/icon.component';
 
-export interface Item {
+export interface SelectItem {
   value: any;
   text: string;
 }
@@ -21,20 +21,20 @@ export interface Item {
   }],
 })
 export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor, InputField {
-  @Input() items: Item[];
+  @Input() items: SelectItem[];
   @HostBinding('class.allow-clear')
   @Input() allowClear = true;
   @Input() autoSelectFirst = false;
   @ViewChild(InputDirective, {static: true}) inputDirective: InputDirective;
   @HostBinding('class.has-dropdown') hasDropdown = false;
-  filtered: Item[] = [];
+  filtered: SelectItem[] = [];
   isDisabled = false;
   changed: EventEmitter<string>;
   focused = new EventEmitter<boolean>();
   focusIndex: number;
   iconChevronDown = Icon.ChevronDown;
   iconClose = Icon.Close;
-  private selected: Item;
+  private selected: SelectItem;
   private onChange: (_: any) => void = (value => this.preloadValue = value);
   private preloadValue: any;
   private onTouched: () => void;
@@ -102,7 +102,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     this.setInputValue(selected);
   }
 
-  select(item: Item, target?): void {
+  select(item: SelectItem, target?): void {
     this.setInputValue(item);
     if (target) {
       this.isFocused = false;
@@ -167,7 +167,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     this.onTouched();
   }
 
-  private setInputValue(item: Item) {
+  private setInputValue(item: SelectItem) {
     this.inputDirective.inputValue = item ? item.text : '';
   }
 

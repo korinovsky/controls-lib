@@ -1,5 +1,6 @@
 import {
-  AfterContentInit, ChangeDetectionStrategy, Component, ContentChild, HostBinding, Input, OnChanges, SimpleChanges
+  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, HostBinding, Input, OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import {InputDirective, InputField} from '../input/input.directive';
 import {AbstractControl, NgControl} from '@angular/forms';
@@ -40,6 +41,10 @@ export class FieldComponent implements AfterContentInit, OnChanges {
   private touched: boolean;
   private status: FieldStatus;
 
+  constructor(
+    private cdr: ChangeDetectorRef
+  ) {}
+
   get inputField(): InputField {
     return this.inputDirective || this.selectComponent;
   }
@@ -56,7 +61,7 @@ export class FieldComponent implements AfterContentInit, OnChanges {
     if (controlField) {
       const {control} = controlField;
       const callFn = (fnName: string, callback: () => void) => {
-        control[fnName] = function(...props) {
+        control[fnName] = function (...props) {
           (AbstractControl.prototype[fnName] as Function).apply(control, props);
           callback();
         };
@@ -80,9 +85,7 @@ export class FieldComponent implements AfterContentInit, OnChanges {
       ['updateValueAndValidity', 'setErrors'].forEach(fn =>
         callFn(fn, () => setParam('status', true))
       );
-      this.pristine = control.pristine;
-      this.touched = control.touched;
-      this.status = control.status as FieldStatus;
+      ['pristine', 'touched', 'status'].forEach(param => this[param] = control[param]);
       this.updateState();
       if (inputField) {
         inputField.changed.subscribe(() => control.markAsUntouched());
@@ -111,5 +114,6 @@ export class FieldComponent implements AfterContentInit, OnChanges {
     }
     this.hasError = this.errors.length > 0;
     this.isDisabled = this.status === FieldStatus.Disabled;
+    this.cdr.markForCheck();
   }
 }
