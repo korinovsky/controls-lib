@@ -17,13 +17,16 @@
     color: $font-color;
     font-size: $font-size;
     cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 
     &:focus {
       outline: none;
     }
 
     &:hover, &.focused {
-      background: #eee;
+      background: $hover-color;
     }
 
     &:last-child {
@@ -42,6 +45,20 @@
 
 .has-focus .has-dropdown .field-input {
   border-radius: $input-br $input-br 0 0;
+}
+
+.field-wrap ctrl-select {
+  .field-input {
+    padding-right: $suffix-width + $suffix-right - $input-bw;
+
+    .has-focus & {
+      border-color: $border-focus-color;
+    }
+  }
+
+  &.allow-clear .field-input {
+    padding-right: $suffix-width * 2 + $suffix-right - $input-bw;
+  }
 }
 
 .allow-clear .field-suffix.clear {

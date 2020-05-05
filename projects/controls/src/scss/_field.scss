@@ -38,7 +38,8 @@
   }
 
   .has-label & .field-input {
-    padding: $input-pt $input-pl $input-pb;
+    padding-top: $input-pt;
+    padding-bottom: $input-pb;
   }
 
   ~ {

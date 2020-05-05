@@ -22,11 +22,12 @@ $border-focus-color: #666;
 $hint-color: #999;
 $warning-color: #ff8c00;
 $error-color: #ff4500;
+$hover-color: #f5f5f5;
 
 $suffix-height: 24px;
 $suffix-width: $suffix-height;
 $suffix-top: ($field-height - $suffix-height) / 2;
-$suffix-right: 9px;
+$suffix-right: $input-pl + $input-bw;
 
 $dropdown-item-height: 38px;
 $dropdown-item-ptb: ($dropdown-item-height - $line-height) / 2 - $input-bw;
