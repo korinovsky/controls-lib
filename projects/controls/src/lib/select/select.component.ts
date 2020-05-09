@@ -31,19 +31,23 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   @HostBinding('class.has-dropdown') hasDropdown = false;
   filtered: SelectItem[] = [];
   isDisabled = false;
+  isFocused = false;
   changed: EventEmitter<string>;
   focused = new BehaviorSubject(false);
-  focusIndex: number;
+  activeItemIndex: number;
   iconChevronDown = Icon.ChevronDown;
   iconClose = Icon.Close;
   private selected: SelectItem;
   private onChange: (_: any) => void = (value => this.preloadValue = value);
   private preloadValue: any;
   private onTouched: () => void;
-  private isFocused = false;
 
   get inputValue() {
     return this.inputDirective.inputValue;
+  }
+
+  get isFieldFocused() {
+    return this.focused.value;
   }
 
   ngOnInit(): void {
@@ -64,18 +68,30 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     });
     this.inputDirective.focused.subscribe(value => {
       if (value) {
-        delete this.focusIndex;
         this.onFocus();
       } else {
         this.onBlur();
       }
     });
+    this.focused.subscribe(() => delete this.activeItemIndex);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('items' in changes) {
       this.filter(this.inputValue);
     }
+  }
+
+  private filter(value: string) {
+    const items = this.items || [];
+    if (value) {
+      value = value.toUpperCase();
+      this.filtered = items.filter(({text}) => text.toUpperCase().includes(value));
+    } else {
+      this.filtered = items;
+    }
+    this.hasDropdown = this.filtered.length > 0;
+    delete this.activeItemIndex;
   }
 
   registerOnChange(fn: (_: any) => void): void {
@@ -142,27 +158,6 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     });
   }
 
-  offsetFocused(offset: number, event: Event) {
-    if (!this.hasDropdown) {
-      return;
-    }
-    const focusIndex = this.focusIndex !== undefined
-      ? this.focusIndex + offset
-      : offset < 0
-        ? this.filtered.length - 1
-        : 0;
-    if (focusIndex >= 0 && focusIndex < this.filtered.length) {
-      this.focusIndex = focusIndex;
-    }
-    event.preventDefault();
-  }
-
-  selectFocused(event: Event) {
-    if (this.focusIndex !== undefined) {
-      this.select(this.filtered[this.focusIndex], event.target);
-    }
-  }
-
   private setBlur() {
     this.setInputValue(this.selected);
     this.focused.next(false);
@@ -171,18 +166,6 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
 
   private setInputValue(item: SelectItem) {
     this.inputDirective.inputValue = item ? item.text : '';
-  }
-
-  private filter(value: string) {
-    const items = this.items || [];
-    if (value) {
-      value = value.toUpperCase();
-      this.filtered = items.filter(({text}) => text.toUpperCase().includes(value));
-    } else {
-      this.filtered = items;
-    }
-    this.hasDropdown = this.filtered.length > 0;
-    delete this.focusIndex;
   }
 
   close(event: MouseEvent | KeyboardEvent) {
@@ -195,17 +178,52 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     }
   }
 
-  @HostListener('keydown.arrowDown', ['$event']) arrowDown(event) {
-    this.offsetFocused(1, event);
+  onInput(value: string) {
+    if (value && this.filtered.length > 0) {
+      this.activeItemIndex = 0;
+    } else {
+      delete this.activeItemIndex;
+    }
   }
-  @HostListener('keydown.arrowUp', ['$event']) arrowUp(event) {
-    this.offsetFocused(-1, event);
+
+  @HostListener('keydown.arrowDown', ['$event'])
+  onKeyArrowDown(event) {
+    this.offsetActiveItem(1, event);
   }
-  @HostListener('keydown.enter', ['$event']) enter(event) {
-    this.selectFocused(event);
+
+  @HostListener('keydown.arrowUp', ['$event'])
+  onKeyArrowUp(event) {
+    this.offsetActiveItem(-1, event);
   }
-  @HostListener('keydown.escape', ['$event']) escape(event) {
+
+  @HostListener('keydown.enter', ['$event'])
+  onKeyEnter(event) {
+    this.selectActiveItem(event);
+  }
+
+  @HostListener('keydown.escape', ['$event'])
+  onKeyEscape(event) {
     this.close(event);
   }
 
+  private offsetActiveItem(offset: number, event: Event) {
+    if (!this.hasDropdown) {
+      return;
+    }
+    const index = this.activeItemIndex !== undefined
+      ? this.activeItemIndex + offset
+      : offset < 0
+        ? this.filtered.length - 1
+        : 0;
+    if (index >= 0 && index < this.filtered.length) {
+      this.activeItemIndex = index;
+    }
+    event.preventDefault();
+  }
+
+  private selectActiveItem(event: Event) {
+    if (this.activeItemIndex !== undefined) {
+      this.select(this.filtered[this.activeItemIndex], event.target);
+    }
+  }
 }
