@@ -1,10 +1,10 @@
 import {Directive, ElementRef, EventEmitter, HostListener, OnInit} from '@angular/core';
 import {FormControl, NgControl} from '@angular/forms';
 import {filter, map} from 'rxjs/operators';
-import {merge, Observable} from 'rxjs';
+import {BehaviorSubject, merge, Observable} from 'rxjs';
 
 export interface InputField {
-  focused: EventEmitter<boolean>;
+  focused: BehaviorSubject<boolean>;
   changed: EventEmitter<string>;
   inputValue: string;
 }
@@ -13,7 +13,7 @@ export interface InputField {
   selector: '[ctrlInput]'
 })
 export class InputDirective implements InputField, OnInit {
-  focused = new EventEmitter<boolean>();
+  focused = new BehaviorSubject(false);
   changed = new EventEmitter<string>();
   element: HTMLInputElement;
   private input = new EventEmitter<string>();
@@ -78,12 +78,12 @@ export class InputDirective implements InputField, OnInit {
 
   @HostListener('focus')
   private onFocus() {
-    this.focused.emit(true);
+    this.focused.next(true);
   }
 
   @HostListener('blur')
   private onBlur() {
-    this.focused.emit(false);
+    this.focused.next(false);
   }
 
   @HostListener('input')

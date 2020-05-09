@@ -1,9 +1,11 @@
 import {
-  ChangeDetectionStrategy, Component, EventEmitter, forwardRef, HostBinding, Input, OnChanges, OnInit, SimpleChanges, ViewChild
+  ChangeDetectionStrategy, Component, EventEmitter, forwardRef, HostBinding, HostListener, Input, OnChanges, OnInit, SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import {InputDirective, InputField} from '../input/input.directive';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Icon} from '../icon/icon.component';
+import {BehaviorSubject} from 'rxjs';
 
 export interface SelectItem {
   value: any;
@@ -30,7 +32,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   filtered: SelectItem[] = [];
   isDisabled = false;
   changed: EventEmitter<string>;
-  focused = new EventEmitter<boolean>();
+  focused = new BehaviorSubject(false);
   focusIndex: number;
   iconChevronDown = Icon.ChevronDown;
   iconClose = Icon.Close;
@@ -123,7 +125,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     this.isFocused = true;
     setTimeout(() => {
       if (this.isFocused) {
-        this.focused.emit(true);
+        this.focused.next(true);
       }
     });
   }
@@ -163,7 +165,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
 
   private setBlur() {
     this.setInputValue(this.selected);
-    this.focused.emit(false);
+    this.focused.next(false);
     this.onTouched();
   }
 
@@ -175,11 +177,35 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     const items = this.items || [];
     if (value) {
       value = value.toUpperCase();
-      this.filtered = items.filter(({text}) => text.toUpperCase().startsWith(value));
+      this.filtered = items.filter(({text}) => text.toUpperCase().includes(value));
     } else {
       this.filtered = items;
     }
     this.hasDropdown = this.filtered.length > 0;
     delete this.focusIndex;
   }
+
+  close(event: MouseEvent | KeyboardEvent) {
+    let target = event.target as HTMLElement;
+    if (!['INPUT', 'BUTTON'].includes(target.tagName)) {
+      target = target.closest('button');
+    }
+    if (target) {
+      target.blur();
+    }
+  }
+
+  @HostListener('keydown.arrowDown', ['$event']) arrowDown(event) {
+    this.offsetFocused(1, event);
+  }
+  @HostListener('keydown.arrowUp', ['$event']) arrowUp(event) {
+    this.offsetFocused(-1, event);
+  }
+  @HostListener('keydown.enter', ['$event']) enter(event) {
+    this.selectFocused(event);
+  }
+  @HostListener('keydown.escape', ['$event']) escape(event) {
+    this.close(event);
+  }
+
 }

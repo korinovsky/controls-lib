@@ -43,8 +43,13 @@
   }
 }
 
-.has-focus .has-dropdown .field-input {
-  border-radius: $input-br $input-br 0 0;
+.has-focus ctrl-select {
+  &.has-dropdown .field-input {
+    border-radius: $input-br $input-br 0 0;
+  }
+  .corner {
+    transform: rotate(180deg);
+  }
 }
 
 .field-wrap ctrl-select {
@@ -61,7 +66,7 @@
   }
 }
 
-.allow-clear .field-suffix.clear {
+ctrl-select.allow-clear .field-suffix.clear {
   display: none;
 
   .has-value & {

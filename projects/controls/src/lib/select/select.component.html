@@ -1,23 +1,20 @@
 <input
-  (keydown.arrowDown)="offsetFocused(1, $event)"
-  (keydown.arrowUp)="offsetFocused(-1, $event)"
-  (keydown.enter)="selectFocused($event)"
   [disabled]="isDisabled"
   ctrlInput
 >
 <button
-  (blur)="onBlur()"
-  (focus)="onFocus()"
-  (keydown.arrowDown)="offsetFocused(1, $event)"
-  (keydown.arrowUp)="offsetFocused(-1, $event)"
-  (keydown.enter)="selectFocused($event)"
-  class="field-suffix"
+  (blur)="focused.value && onBlur()"
+  (click)="isFocused ? close($event) : onFocus()"
+  (focus)="focused.value && onFocus()"
+  class="field-suffix corner"
   tabindex="-1"
 >
   <ctrl-icon [icon]="iconChevronDown"></ctrl-icon>
 </button>
 <button
+  (blur)="focused.value && onBlur()"
   (click)="clear()"
+  (focus)="focused.value && onFocus()"
   class="field-suffix clear"
   tabindex="-1"
 >
@@ -28,9 +25,6 @@
     (blur)="onBlur()"
     (click)="select(item, $event.target)"
     (focus)="focusIndex = index; onFocus()"
-    (keydown.arrowDown)="offsetFocused(1, $event)"
-    (keydown.arrowUp)="offsetFocused(-1, $event)"
-    (keydown.enter)="selectFocused($event)"
     *ngFor="let item of filtered; let index = index"
     [class.focused]="focusIndex === index"
     tabindex="-1"
