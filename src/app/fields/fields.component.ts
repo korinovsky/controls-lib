@@ -10,7 +10,7 @@ export class FieldsComponent implements OnInit {
   inputControl = new FormControl(null, Validators.required);
   inputControl2 = new FormControl();
   textControl = new FormControl(null, Validators.required);
-  selectControl = new FormControl('1', Validators.required);
+  selectControl = new FormControl({value: null, disabled: false}, Validators.required);
 
   constructor() {
   }

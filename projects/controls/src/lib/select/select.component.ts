@@ -24,7 +24,6 @@ export interface SelectItem {
 })
 export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor, InputField {
   @Input() items: SelectItem[];
-  @HostBinding('class.allow-clear')
   @Input() allowClear = true;
   @Input() autoSelectFirst = false;
   @ViewChild(InputDirective, {static: true}) inputDirective: InputDirective;
@@ -111,12 +110,10 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
 
   writeValue(value: any): void {
     let selected = this.items && this.items.find(item => item.value === value) || null;
-    if (this.selected === undefined && !selected === !value) {
-      this.selected = selected;
-    }
-    if (!selected && this.autoSelectFirst && this.items && this.items.length > 0) {
+    if (this.selected === undefined && !selected && this.autoSelectFirst && this.items?.length > 0) {
       selected = this.items[0];
     }
+    this.selected = selected;
     this.setInputValue(selected);
   }
 
@@ -165,7 +162,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   }
 
   private setInputValue(item: SelectItem) {
-    this.inputDirective.inputValue = item ? item.text : '';
+    this.inputDirective.inputValue = item?.text || '';
   }
 
   close(event: MouseEvent | KeyboardEvent) {

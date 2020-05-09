@@ -11,7 +11,7 @@
     line-height: $line-height;
     padding: $dropdown-item-ptb $input-pl;
     width: 100%;
-    background: #fff;
+    background: $field-background-color;
     border: $input-bw solid $border-focus-color;
     border-top-color: $border-color;
     color: $font-color;
@@ -43,33 +43,36 @@
   }
 }
 
-.has-focus ctrl-select {
-  &.has-dropdown .field-input {
-    border-radius: $input-br $input-br 0 0;
-  }
-  .corner {
-    transform: rotate(180deg);
-  }
-}
+ctrl-select {
+  .has-focus & {
+    &.has-dropdown .field-input {
+      border-radius: $input-br $input-br 0 0;
+    }
 
-.field-wrap ctrl-select {
-  .field-input {
-    padding-right: $suffix-width + $suffix-right - $input-bw;
-
-    .has-focus & {
-      border-color: $border-focus-color;
+    .corner {
+      transform: rotate(180deg);
     }
   }
 
-  &.allow-clear .field-input {
-    padding-right: $suffix-width * 2 + $suffix-right - $input-bw;
+  .field-wrap & {
+    .field-input {
+      padding-right: $suffix-width + $suffix-right - $input-bw;
+
+      .has-focus & {
+        border-color: $border-focus-color;
+      }
+    }
+
+    .has-value & .field-input:not(:disabled) {
+      padding-right: $suffix-width * 2 + $suffix-right - $input-bw;
+    }
   }
-}
 
-ctrl-select.allow-clear .field-suffix.clear {
-  display: none;
+  .field-suffix.clear {
+    display: none;
 
-  .has-value & {
-    display: block;
+    .has-value &:not(:disabled) {
+      display: block;
+    }
   }
 }

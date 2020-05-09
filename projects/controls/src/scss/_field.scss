@@ -46,7 +46,7 @@
     .hint, .warning, .error {
       font-size: $font-size-small;
       line-height: $line-height-small;
-      margin: -$hint-mb 0 $hint-mb;
+      margin: -$hint-mb $input-pl + $input-bw $hint-mb;
 
       + .hint, + .warning, + .error {
         margin-bottom: $hint-mb;
@@ -79,7 +79,7 @@
   top: $suffix-top;
   right: $suffix-right;
   border: none;
-  background: #fff;
+  background: $field-background-color;
   padding: 0;
   color: $border-color;
 
@@ -93,9 +93,15 @@
 }
 
 button.field-suffix {
-  cursor: pointer;
+  &:disabled {
+    background: $field-background-disabled-color;
+  }
 
-  &:hover {
-    color: $border-focus-color;
+  &:not(:disabled) {
+    cursor: pointer;
+
+    &:hover {
+      color: $border-focus-color;
+    }
   }
 }

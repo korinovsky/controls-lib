@@ -7,6 +7,7 @@
   (blur)="isFieldFocused && onBlur()"
   (click)="isFocused ? close($event) : onFocus()"
   (focus)="isFieldFocused && onFocus()"
+  [disabled]="isDisabled"
   class="field-suffix corner"
   tabindex="-1"
 >
@@ -16,6 +17,7 @@
   (blur)="isFieldFocused && onBlur()"
   (click)="clear()"
   (focus)="isFieldFocused && onFocus()"
+  [disabled]="isDisabled"
   class="field-suffix clear"
   tabindex="-1"
 >

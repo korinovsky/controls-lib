@@ -10,10 +10,24 @@
   border-radius: $input-br;
   box-sizing: border-box;
   resize: none;
+  background: $field-background-color;
+  text-overflow: ellipsis;
+
+  &::placeholder {
+    color: $border-color;
+  }
 
   &:focus {
     border-color: $border-focus-color;
     outline: none;
+
+    &::placeholder {
+      color: $border-focus-color;
+    }
+  }
+
+  &:disabled {
+    background: $field-background-disabled-color;
   }
 }
 
