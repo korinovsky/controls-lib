@@ -33,3 +33,5 @@ $suffix-right: $input-pl + $input-bw;
 
 $dropdown-item-height: 38px;
 $dropdown-item-ptb: ($dropdown-item-height - $line-height) / 2 - $input-bw;
+$dropdown-max: 6;
+$dropdown-max-height: ($dropdown-item-height - $input-bw) * $dropdown-max - $input-bw;

@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {SelectComponent} from './select.component';
 import {InputModule} from '../input/input.module';
 import {IconModule} from '../icon/icon.module';
+import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import {IconModule} from '../icon/icon.module';
     CommonModule,
     InputModule,
     IconModule,
+    PerfectScrollbarModule,
   ]
 })
 export class SelectModule {}

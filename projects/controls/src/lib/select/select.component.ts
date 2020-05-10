@@ -6,6 +6,7 @@ import {InputDirective, InputField} from '../input/input.directive';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Icon} from '../icon/icon.component';
 import {BehaviorSubject} from 'rxjs';
+import {PerfectScrollbarDirective} from 'ngx-perfect-scrollbar';
 
 export interface SelectItem {
   value: any;
@@ -27,6 +28,7 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   @Input() allowClear = true;
   @Input() autoSelectFirst = false;
   @ViewChild(InputDirective, {static: true}) inputDirective: InputDirective;
+  @ViewChild(PerfectScrollbarDirective) perfectScrollbar: PerfectScrollbarDirective;
   @HostBinding('class.has-dropdown') hasDropdown = false;
   filtered: SelectItem[] = [];
   isDisabled = false;
@@ -89,8 +91,25 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     } else {
       this.filtered = items;
     }
-    this.hasDropdown = this.filtered.length > 0;
+    this.setHasDropdown();
     delete this.activeItemIndex;
+  }
+
+  private setHasDropdown() {
+    const hasDropdown = this.filtered.length > 0;
+    if (!this.hasDropdown && hasDropdown) {
+      setTimeout(() => this.fixPsTabindex())
+    }
+    this.hasDropdown = hasDropdown;
+  }
+
+  private fixPsTabindex() {
+    const psElement = this.perfectScrollbar?.elementRef.nativeElement as HTMLDivElement;
+    if (psElement) {
+      psElement.querySelectorAll('div[class^="ps__"][tabindex]').forEach(
+        child => (child as HTMLDivElement).tabIndex = -1
+      );
+    }
   }
 
   registerOnChange(fn: (_: any) => void): void {
@@ -198,12 +217,19 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
     this.selectActiveItem(event);
   }
 
+  private selectActiveItem(event: Event) {
+    if (this.activeItemIndex !== undefined) {
+      this.select(this.filtered[this.activeItemIndex], event.target);
+    }
+  }
+
   @HostListener('keydown.escape', ['$event'])
   onKeyEscape(event) {
     this.close(event);
   }
 
   private offsetActiveItem(offset: number, event: Event) {
+    event.preventDefault();
     if (!this.hasDropdown) {
       return;
     }
@@ -212,15 +238,21 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
       : offset < 0
         ? this.filtered.length - 1
         : 0;
-    if (index >= 0 && index < this.filtered.length) {
-      this.activeItemIndex = index;
-    }
-    event.preventDefault();
+    this.activeItemIndex = index < 0
+      ? this.filtered.length - 1
+      : index >= this.filtered.length
+        ? 0
+        : index;
+    this.scrollToItem();
   }
 
-  private selectActiveItem(event: Event) {
-    if (this.activeItemIndex !== undefined) {
-      this.select(this.filtered[this.activeItemIndex], event.target);
+  private scrollToItem() {
+    const psElement = this.perfectScrollbar.elementRef.nativeElement as HTMLDivElement;
+    const {offsetHeight, scrollHeight} = psElement;
+    if (offsetHeight < scrollHeight) {
+      const qs = 'button' + (this.activeItemIndex > 0 ? `:nth-child(${this.activeItemIndex + 1})` : '');
+      const offsetScroll = (offsetHeight - psElement.querySelector('button').offsetHeight) / 2;
+      this.perfectScrollbar.scrollToElement(qs, -offsetScroll);
     }
   }
 }

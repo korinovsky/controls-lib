@@ -24,16 +24,18 @@
   <ctrl-icon [icon]="iconClose"></ctrl-icon>
 </button>
 <div *ngIf="hasDropdown" class="field-dropdown">
-  <button
-    (blur)="onBlur()"
-    (click)="select(item, $event.target)"
-    (focus)="onFocus()"
-    (mouseenter)="activeItemIndex = index"
-    *ngFor="let item of filtered; let index = index"
-    [class.active]="activeItemIndex === index"
-    tabindex="-1"
-    type="button"
-  >
-    {{item.text}}
-  </button>
+  <div [perfectScrollbar]="{suppressScrollX: true}" class="ps">
+    <button
+      (blur)="onBlur()"
+      (click)="select(item, $event.target)"
+      (focus)="onFocus()"
+      (mouseenter)="activeItemIndex = index"
+      *ngFor="let item of filtered; let index = index"
+      [class.active]="activeItemIndex === index"
+      tabindex="-1"
+      type="button"
+    >
+      {{item.text}}
+    </button>
+  </div>
 </div>
