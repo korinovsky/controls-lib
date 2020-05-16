@@ -1,8 +1,8 @@
 .field-dropdown {
-  display: none;
-  position: absolute;
-  width: calc(100% - #{$input-bw * 2});
-  top: $field-height - $input-bw;
+  //display: none;
+  //position: absolute;
+  //width: calc(100% - #{$input-bw * 2});
+  //top: $field-height - $input-bw;
   border: $input-bw solid $border-focus-color;
   border-top-color: $border-color;
   border-radius: 0 0 $input-br $input-br;

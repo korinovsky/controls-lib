@@ -1,4 +1,5 @@
 <input
+  #input
   (input)="onInput($event.target['value'])"
   [disabled]="isDisabled"
   ctrlInput
@@ -23,8 +24,12 @@
 >
   <ctrl-icon [icon]="iconClose"></ctrl-icon>
 </button>
-<div *ngIf="hasDropdown" class="field-dropdown">
-  <div [perfectScrollbar]="{suppressScrollX: true}" class="ps">
+<ctrl-overlay
+  *ngIf="hasDropdown"
+  [connectedTo]="input"
+  overlayClass="field-dropdown"
+>
+  <perfect-scrollbar [config]="{suppressScrollX: true}">
     <button
       (blur)="onBlur()"
       (click)="select(item, $event.target)"
@@ -37,5 +42,5 @@
     >
       {{item.text}}
     </button>
-  </div>
-</div>
+  </perfect-scrollbar>
+</ctrl-overlay>
