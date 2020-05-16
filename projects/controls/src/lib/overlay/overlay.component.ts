@@ -1,17 +1,25 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output, ViewChild
+} from '@angular/core';
 import {CdkPortal} from '@angular/cdk/portal';
-import {FlexibleConnectedPositionStrategyOrigin, Overlay, OverlayConfig} from '@angular/cdk/overlay';
+import {FlexibleConnectedPositionStrategyOrigin, Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import _identity from 'lodash/identity';
+
+const overlayClass = 'ctrl-overlay';
+const overlayAboveClass = 'ctrl-overlay-above';
 
 @Component({
   selector: 'ctrl-overlay',
   templateUrl: './overlay.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OverlayComponent implements AfterViewInit {
+export class OverlayComponent implements AfterViewInit, OnDestroy {
   @Input() overlayClass: string;
   @Input() connectedTo: FlexibleConnectedPositionStrategyOrigin;
+  @Output() above = new EventEmitter<boolean>();
   @ViewChild(CdkPortal) portal: CdkPortal;
+  private overlayRef: OverlayRef;
+  private isAbove: boolean;
 
   constructor(
     private overlay: Overlay
@@ -25,18 +33,22 @@ export class OverlayComponent implements AfterViewInit {
         overlayX: 'start',
         overlayY: 'top',
         offsetY: -1,
-        panelClass: this.getPanelClass('ctrl-overlay-bottom'),
+        panelClass: this.getPanelClass(),
       }, {
         originX: 'start',
         originY: 'top',
         overlayX: 'start',
         overlayY: 'bottom',
         offsetY: 1,
-        panelClass: this.getPanelClass('ctrl-overlay-top'),
+        panelClass: this.getPanelClass(overlayAboveClass),
       }]).withFlexibleDimensions(false);
 
       positionStrategy.positionChanges.subscribe(changes => {
-        console.log(changes);
+        const isAbove = changes.connectionPair.panelClass.includes(overlayAboveClass)
+        if (this.isAbove !== isAbove) {
+          this.isAbove = isAbove;
+          this.above.emit(isAbove);
+        }
       });
       const scrollStrategy = this.overlay.scrollStrategies.reposition();
       return {
@@ -54,14 +66,20 @@ export class OverlayComponent implements AfterViewInit {
   }
 
   private getPanelClass(className?: string) {
-    return ['ctrl-overlay', this.overlayClass, className].filter(_identity);
+    return [overlayClass, this.overlayClass, className].filter(_identity);
   }
 
   ngAfterViewInit(): void {
-    const overlayRef = this.overlay.create({
+    this.overlayRef = this.overlay.create({
       ...this.overlayConfig,
       panelClass: this.getPanelClass(),
     });
-    overlayRef.attach(this.portal);
+    this.overlayRef.attach(this.portal);
+  }
+
+  ngOnDestroy(): void {
+    if (this.overlayRef) {
+      this.overlayRef.dispose();
+    }
   }
 }

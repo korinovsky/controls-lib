@@ -1,12 +1,12 @@
 import {
-  ChangeDetectionStrategy, Component, EventEmitter, forwardRef, HostBinding, HostListener, Input, OnChanges, OnInit, SimpleChanges,
-  ViewChild
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, HostListener, Input, OnChanges,
+  OnInit, SimpleChanges, ViewChild
 } from '@angular/core';
 import {InputDirective, InputField} from '../input/input.directive';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Icon} from '../icon/icon.component';
 import {BehaviorSubject} from 'rxjs';
-import {PerfectScrollbarDirective} from 'ngx-perfect-scrollbar';
+import {PerfectScrollbarComponent} from 'ngx-perfect-scrollbar';
 
 export interface SelectItem {
   value: any;
@@ -28,8 +28,9 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   @Input() allowClear = true;
   @Input() autoSelectFirst = false;
   @ViewChild(InputDirective, {static: true}) inputDirective: InputDirective;
-  @ViewChild(PerfectScrollbarDirective) perfectScrollbar: PerfectScrollbarDirective;
-  @HostBinding('class.has-dropdown') hasDropdown = false;
+  @ViewChild(PerfectScrollbarComponent) perfectScrollbar: PerfectScrollbarComponent;
+  hasDropdown = false;
+  isDropdownAbove = false;
   filtered: SelectItem[] = [];
   isDisabled = false;
   isFocused = false;
@@ -42,6 +43,10 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   private onChange: (_: any) => void = (value => this.preloadValue = value);
   private preloadValue: any;
   private onTouched: () => void;
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   get inputValue() {
     return this.inputDirective.inputValue;
@@ -74,7 +79,10 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
         this.onBlur();
       }
     });
-    this.focused.subscribe(() => delete this.activeItemIndex);
+    this.focused.subscribe(() => {
+      this.setHasDropdown();
+      delete this.activeItemIndex;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,15 +104,22 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   }
 
   private setHasDropdown() {
-    const hasDropdown = this.filtered.length > 0;
-    if (!this.hasDropdown && hasDropdown) {
+    const hasDropdown = this.filtered.length > 0 && this.isFieldFocused;
+    if (this.hasDropdown === hasDropdown) {
+      return;
+    }
+    if (hasDropdown) {
       setTimeout(() => this.fixPsTabindex())
+    } else {
+      console.log(false);
+      this.isDropdownAbove = false;
     }
     this.hasDropdown = hasDropdown;
+    this.cdr.markForCheck();
   }
 
   private fixPsTabindex() {
-    const psElement = this.perfectScrollbar?.elementRef.nativeElement as HTMLDivElement;
+    const psElement = this.perfectScrollbarElement;
     if (psElement) {
       psElement.querySelectorAll('div[class^="ps__"][tabindex]').forEach(
         child => (child as HTMLDivElement).tabIndex = -1
@@ -247,12 +262,25 @@ export class SelectComponent implements OnInit, OnChanges, ControlValueAccessor,
   }
 
   private scrollToItem() {
-    const psElement = this.perfectScrollbar.elementRef.nativeElement as HTMLDivElement;
+    const psElement = this.perfectScrollbarElement;
     const {offsetHeight, scrollHeight} = psElement;
     if (offsetHeight < scrollHeight) {
       const qs = 'button' + (this.activeItemIndex > 0 ? `:nth-child(${this.activeItemIndex + 1})` : '');
       const offsetScroll = (offsetHeight - psElement.querySelector('button').offsetHeight) / 2;
-      this.perfectScrollbar.scrollToElement(qs, -offsetScroll);
+      this.perfectScrollbarDirective.scrollToElement(qs, -offsetScroll);
     }
+  }
+
+  private get perfectScrollbarElement() {
+    return this.perfectScrollbarDirective?.elementRef.nativeElement as HTMLDivElement;
+  }
+
+  private get perfectScrollbarDirective() {
+    return this.perfectScrollbar?.directiveRef;
+  }
+
+  dropdownAboveChanged(isAbove: boolean) {
+    this.isDropdownAbove = isAbove;
+    this.cdr.detectChanges();
   }
 }

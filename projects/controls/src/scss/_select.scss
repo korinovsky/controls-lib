@@ -1,12 +1,14 @@
 .field-dropdown {
-  //display: none;
-  //position: absolute;
-  //width: calc(100% - #{$input-bw * 2});
-  //top: $field-height - $input-bw;
   border: $input-bw solid $border-focus-color;
   border-top-color: $border-color;
   border-radius: 0 0 $input-br $input-br;
   overflow: hidden;
+
+  &.ctrl-overlay-above {
+    border-radius: $input-br $input-br 0 0;
+    border-top-color: $border-focus-color;
+    border-bottom-color: $border-color;
+  }
 
   button {
     display: block;
@@ -50,8 +52,12 @@
 
 ctrl-select {
   .has-focus & {
-    &.has-dropdown .field-input {
+    .has-dropdown {
       border-radius: $input-br $input-br 0 0;
+    }
+
+    .is-dropdown-above {
+      border-radius: 0 0 $input-br $input-br;
     }
 
     .corner {

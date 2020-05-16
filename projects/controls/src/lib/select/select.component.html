@@ -1,6 +1,8 @@
 <input
   #input
   (input)="onInput($event.target['value'])"
+  [class.has-dropdown]="hasDropdown"
+  [class.is-dropdown-above]="isDropdownAbove"
   [disabled]="isDisabled"
   ctrlInput
 >
@@ -25,11 +27,12 @@
   <ctrl-icon [icon]="iconClose"></ctrl-icon>
 </button>
 <ctrl-overlay
+  (above)="dropdownAboveChanged($event)"
   *ngIf="hasDropdown"
   [connectedTo]="input"
   overlayClass="field-dropdown"
 >
-  <perfect-scrollbar [config]="{suppressScrollX: true}">
+  <perfect-scrollbar [config]="{suppressScrollX: true}" [ngStyle]="{'min-width.px': input.clientWidth}">
     <button
       (blur)="onBlur()"
       (click)="select(item, $event.target)"
