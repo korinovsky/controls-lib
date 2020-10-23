@@ -4,7 +4,7 @@ import {SelectComponent} from './select.component';
 import {InputModule} from '../input/input.module';
 import {IconModule} from '../icon/icon.module';
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
-import {OverlayModule} from '../overlay/overlay.module';
+import {OverlayModule} from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [

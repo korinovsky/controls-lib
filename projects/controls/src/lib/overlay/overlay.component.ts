@@ -78,8 +78,6 @@ export class OverlayComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.overlayRef) {
-      this.overlayRef.dispose();
-    }
+    this.overlayRef?.dispose();
   }
 }
