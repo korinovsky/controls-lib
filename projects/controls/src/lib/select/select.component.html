@@ -28,7 +28,7 @@
 </button>
 <ctrl-overlay
   (above)="dropdownAboveChanged($event)"
-  *ngIf="hasDropdown"
+  *ngIf="hasDropdown && isFieldFocused"
   [connectedTo]="input"
   overlayClass="field-dropdown"
 >
