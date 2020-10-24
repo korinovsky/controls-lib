@@ -21,5 +21,4 @@ import {InputModule} from '../../../projects/controls/src/lib/input/input.module
     FieldsComponent
   ]
 })
-export class FieldsModule {
-}
+export class FieldsModule {}

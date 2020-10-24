@@ -1,0 +1,48 @@
+.toast {
+  margin-top: $toast-spacer;
+  margin-right: $toast-spacer;
+  width: $toast-width;
+  box-shadow: $toast-box-shadow;
+  border-radius: $toast-border-radius;
+
+  .toast-header {
+    display: flex;
+    justify-content: space-between;
+    padding: $toast-spacer * .75 $toast-spacer;
+    border-radius: $toast-border-radius $toast-border-radius 0 0;
+    background-color: $border-color;
+    color: #fff;
+
+    button {
+      display: inline-block;
+      margin: (-$toast-spacer * .75) (-$toast-spacer);
+      padding: 0 $toast-spacer;
+      border: 0 none;
+      background: none;
+      cursor: pointer;
+      color: inherit;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .toast-body {
+    border-radius: 0 0 $toast-border-radius $toast-border-radius;
+    padding: $toast-spacer * .75 $toast-spacer;
+    background-color: $toast-background-color;
+  }
+
+  &.toast-error .toast-header {
+    background-color: $error-color;
+  }
+
+  &.toast-warning .toast-header {
+    background-color: $warning-color;
+  }
+
+  &.toast-success .toast-header {
+    background-color: $success-color;
+  }
+}

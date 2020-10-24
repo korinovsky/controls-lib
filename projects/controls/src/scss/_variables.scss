@@ -22,6 +22,7 @@ $border-focus-color: #666;
 $hint-color: #999;
 $warning-color: #ff8c00;
 $error-color: #ff4500;
+$success-color: #32cd32;
 $hover-color: #f5f5f5;
 $field-background-color: #fff;
 $field-background-disabled-color: #f5f5f5;
@@ -35,3 +36,9 @@ $dropdown-item-height: 38px;
 $dropdown-item-ptb: ($dropdown-item-height - $line-height) / 2 - $input-bw;
 $dropdown-max: 6;
 $dropdown-max-height: ($dropdown-item-height - $input-bw) * $dropdown-max - $input-bw;
+
+$toast-width: 20rem;
+$toast-spacer: .75rem;
+$toast-background-color: #fff;
+$toast-border-radius: 4px;
+$toast-box-shadow: 0 .25rem .75rem rgba(0,0,0,.1);
